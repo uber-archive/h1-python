@@ -1,0 +1,7 @@
+# This file is where you specify your high-level dependencies.
+# For example you might add a line that looks like this:
+#
+# pytz>2016.3
+requests>2.4,<3.0
+requests_futures
+python-dateutil

@@ -1,0 +1,26 @@
+# Python
+/env/
+/build/
+*.py[co]
+*.egg*
+.cache
+.DS_Store
+.jenkins
+.arcconfig
+
+# Emacs
+*~
+.\#*
+\#*\#
+
+# Mac
+.DS_Store
+
+# Pycharm
+/.idea/
+
+.coverage
+cover
+
+coverage.xml
+jenkins.xml

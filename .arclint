@@ -1,0 +1,9 @@
+{
+  "linters": {
+    "flake8": {
+      "type": "flake8",
+      "include": "(\\.py$)",
+      "exclude": ["(pb2\\.py$)", "(docs/\\.py$)"]
+    }
+  }
+}

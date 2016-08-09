@@ -1,0 +1,6 @@
+coverage
+pytest
+pytest-cov
+flake8
+zest.releaser
+requests-mock
