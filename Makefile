@@ -1,10 +1,16 @@
-# disable builtin and suffix rules
-MAKEFLAGS += --no-builtin-rules
-.SUFFIXES:
+project := h1
 
-.PHONY: help clean deps lint test coverage release install jenkins
+pytest := PYTHONDONTWRITEBYTECODE=1 py.test --tb short -rxs \
+	--cov-config .coveragerc --cov $(project) tests
+
+html_report := --cov-report=html
+test_args := --cov-report xml --cov-report term-missing
+
+.PHONY: clean-pyc clean-build docs clean
+.DEFAULT_GOAL : help
 
 help:
+	@echo "bootstrap - initialize local environement for development. Requires virtualenv."
 	@echo "clean - remove all build, test, coverage and Python artifacts"
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
@@ -12,20 +18,18 @@ help:
 	@echo "lint - check style with flake8"
 	@echo "test - run tests quickly with the default Python"
 	@echo "coverage - check code coverage quickly with the default Python"
-	@echo "deps - force update of requirements specs"
+	@echo "docs - generate Sphinx HTML documentation, including API docs"
 	@echo "release - package and upload a release"
+	@echo "dist - package"
 	@echo "install - install the package to the active Python's site-packages"
 
-env:
-	virtualenv --setuptools $@
-	$@/bin/pip install -U "setuptools>=19,<20"
-	$@/bin/pip install -U "pip>=7,<8"
-	$@/bin/pip install -U "pip-tools>=1.6.0,<2"
+check-virtual-env:
+	@echo virtual-env: $${VIRTUAL_ENV?"Please run in virtual-env"}
 
-# sentinel file to ensure installed requirements match current specs
-env/.requirements: requirements.txt requirements-test.txt | env
-	$|/bin/pip-sync $^
-	touch $@
+bootstrap: check-virtual-env
+	pip install -r requirements.txt
+	pip install -r requirements-test.txt
+	python setup.py develop
 
 clean: clean-build clean-pyc clean-test
 
@@ -34,7 +38,7 @@ clean-build:
 	rm -fr dist/
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.egg' -exec rm -rf {} +
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
@@ -44,35 +48,45 @@ clean-pyc:
 
 clean-test:
 	rm -f .coverage
+	rm -f coverage.xml
 	rm -fr htmlcov/
 
-lint: env/.requirements
-	env/bin/flake8 h1 tests
+lint:
+	flake8 $(project) tests
 
-test: env/.requirements
-	env/bin/python setup.py test $(TEST_ARGS)
+test:
+	$(pytest) $(test_args)
 
-# tests that emit artifacts jenkins/phabricator look for
-jenkins: env/.requirements
-	env/bin/py.test -s --tb short --cov-config .coveragerc --cov dash_gen --cov-report term-missing --cov-report xml \
-	    --junitxml junit.xml \
-	    tests
+jenkins:
+	pip install -r requirements.txt
+	pip install -r requirements-test.txt
+	python setup.py develop
+	CLAY_CONFIG=config/test.yaml $(pytest) $(test_args) --junit-xml=jenkins.xml
 
-coverage: env/.requirements test
-	env/bin/coverage run --source h1 setup.py test
-	env/bin/coverage report -m
-	env/bin/coverage html
+coverage:
+	coverage run --source $(project) setup.py test
+	coverage report -m
+	coverage html
 	open htmlcov/index.html
 
-release: env/.requirements clean
-	env/bin/fullrelease
+docs:
+	$(MAKE) -C docs clean
+	$(MAKE) -C docs html
 
-install: clean
+release: clean
+	@echo Please see README
+#	python setup.py sdist upload
+#	python setup.py bdist_wheel upload
+
+dist: clean
+	@echo Please see README
+#	python setup.py sdist
+#	python setup.py bdist_wheel
+#	ls -l dist
+
+install:
+	pip install -r requirements.txt
+	pip install -r requirements-test.txt
+	echo skipping pip install -r requirements-doc.txt
 	python setup.py install
 
-deps:
-	@touch requirements.in requirements-test.in
-	$(MAKE) requirements.txt requirements-test.txt
-
-requirements.txt requirements-test.txt: %.txt: %.in | env
-	$|/bin/pip-compile --no-index $^

@@ -1,0 +1,11 @@
+sudo: false
+language: python
+cache: false
+
+python:
+  - "2.7"
+  - "3.5"
+install:
+  - make bootstrap
+script: 
+  - make lint test

@@ -109,4 +109,7 @@ Here's an example of using the client to figure out who your most prolific repor
 Running Tests
 =============
 
+    virtualenv env
+    source env/bin/activate
+    make bootstrap
     make test

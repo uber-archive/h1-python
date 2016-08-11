@@ -21,6 +21,7 @@
 
 .coverage
 cover
+htmlcov
 
 coverage.xml
 jenkins.xml

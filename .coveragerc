@@ -1,5 +1,5 @@
 [html]
-directory = cover
+directory = htmlcov
 
 [run]
 omit = tests/*,docs/*,env/*,build/*
