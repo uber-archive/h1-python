@@ -109,6 +109,8 @@ Here's an example of using the client to figure out who your most prolific repor
 Running Tests
 =============
 
+.. code-block:: bash
+
     virtualenv env
     source env/bin/activate
     make bootstrap
