@@ -24,6 +24,8 @@ import collections
 import itertools
 import threading
 
+import six
+
 
 # From itertools documentation
 def _consume(iterator, n=None):
@@ -106,7 +108,7 @@ class LazyListing(object):
         required_len = None
         if isinstance(item, slice):
             required_len = _slice_required_len(item)
-        elif isinstance(item, (int, long)):
+        elif isinstance(item, six.integer_types):
             required_len = item + 1
             if required_len <= 0:
                 required_len = None

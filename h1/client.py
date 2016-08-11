@@ -20,10 +20,9 @@
 
 from __future__ import print_function, unicode_literals, division, absolute_import
 
-from urllib import quote
-
 from requests.auth import HTTPBasicAuth
 from requests_futures.sessions import FuturesSession
+from six.moves.urllib.parse import quote
 
 from .models import hydrate_object, hydrate_objects
 from .lazy_listing import LazyListing

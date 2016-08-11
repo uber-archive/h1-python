@@ -23,6 +23,7 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 import datetime as dt
 import decimal
 import json
+import six
 
 import dateutil.parser
 
@@ -63,10 +64,10 @@ class _HydrationRegistrant(type):
             _type_hydrators[h1_type] = cls
 
 
+@six.add_metaclass(_HydrationRegistrant)
 class HackerOneObject(object):
     # subclasses will automatically register themselves
     # as the hydrator for their `TYPE`
-    __metaclass__ = _HydrationRegistrant
 
     TYPE = None
 
