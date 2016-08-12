@@ -25,15 +25,21 @@ Installation
 
 For installation via pip:
 
+.. code-block:: bash
+
     pip install h1
 
 For development, In the project root run:
+
+.. code-block:: bash
 
     virtualenv env
     source env/bin/activate
     make bootstrap
 
 The manual approach should work as well:
+
+.. code-block:: bash
 
     python setup.py install
 
