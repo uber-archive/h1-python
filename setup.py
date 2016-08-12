@@ -71,5 +71,7 @@ setup(
     classifiers=[
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
     ]
 )
