@@ -5,6 +5,11 @@
 h1
 ==
 
+.. image:: https://img.shields.io/pypi/pyversions/h1.svg
+.. image:: https://img.shields.io/pypi/v/h1.svg
+    :target: https://pypi.python.org/pypi/h1
+
+
 A HackerOne API client for Python. The API closely maps to the REST API that HackerOne provides.
 Documentation for their API is `available here <https://api.hackerone.com/docs/v1>`_.
 
@@ -18,11 +23,17 @@ MIT
 Installation
 ============
 
+For installation via pip:
+
+    pip install h1
+
 For development, In the project root run:
 
-    make env
+    virtualenv env
+    source env/bin/activate
+    make bootstrap
 
-The standard approach should work as well:
+The manual approach should work as well:
 
     python setup.py install
 
