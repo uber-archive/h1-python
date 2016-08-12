@@ -65,8 +65,11 @@ setup(
     long_description=read_long_description(),
     name='h1',
     packages=find_packages(),
-    url='gitolite@code.uber.internal:engsec/hackerone_python',
+    url='https://github.com/uber-common/h1-python',
     version=version,
     zip_safe=False,
-    classifiers=['Private :: Do Not Upload']
+    classifiers=[
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Software Development :: Libraries',
+    ]
 )
