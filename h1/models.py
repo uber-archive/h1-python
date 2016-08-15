@@ -256,8 +256,22 @@ class Report(HackerOneResource):
         self._make_attribute("disclosed_at", self._hydrate_datetime)
         self._make_attribute("title", self._hydrate_verbatim)
         self._make_attribute("first_program_activity_at", self._hydrate_datetime)
-        self._make_attribute("vulnerability_information", self._hydrate_verbatim)
         self._make_attribute("state", self._hydrate_verbatim)
+        self._make_attribute(
+            "vulnerability_information",
+            self._hydrate_verbatim,
+            optional=True,
+        )
+        self._make_attribute(
+            "issue_tracker_reference_id",
+            self._hydrate_verbatim,
+            optional=True,
+        )
+        self._make_attribute(
+            "issue_tracker_reference_url",
+            self._hydrate_verbatim,
+            optional=True,
+        )
 
         self._make_relationship("reporter", self._hydrate_object)
         self._make_relationship("assignee", self._hydrate_object)
@@ -365,14 +379,14 @@ class Address(HackerOneObject):
         self._make_attribute("postal_code", self._hydrate_verbatim)
         self._make_attribute("state", self._hydrate_verbatim)
         self._make_attribute("country", self._hydrate_verbatim)
-        self._make_attribute("tshirt_size", self._hydrate_verbatim)
-        self._make_attribute("phone_number", self._hydrate_verbatim)
+        self._make_attribute("tshirt_size", self._hydrate_verbatim, optional=True)
+        self._make_attribute("phone_number", self._hydrate_verbatim, optional=True)
         self._make_attribute("created_at", self._hydrate_datetime)
 
 
 class ActivityBase(HackerOneObject):
     def _hydrate(self):
-        self._make_attribute("message", self._hydrate_verbatim)
+        self._make_attribute("message", self._hydrate_verbatim, optional=True)
         self._make_attribute("internal", self._hydrate_verbatim)
         self._make_attribute("created_at", self._hydrate_datetime)
         self._make_attribute("updated_at", self._hydrate_datetime)
