@@ -222,11 +222,21 @@ class Report(HackerOneResource):
 
     @property
     def total_bounty(self):
+        if not self.bounties:
+            return None
         return sum(b.amount for b in self.bounties)
 
     @property
     def total_payout(self):
-        return sum(b.amount + b.bonus_amount for b in self.bounties)
+        if not self.bounties:
+            return None
+        return self.total_bounty + sum(b.bonus_amount for b in self.bounties)
+
+    @property
+    def time_to_bounty(self):
+        if not self.bounties:
+            return None
+        return self.bounties[0].created_at - self.created_at
 
     @property
     def time_to_closed(self):
