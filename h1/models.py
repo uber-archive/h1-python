@@ -118,12 +118,14 @@ class HackerOneObject(object):
             attr_val = attrs[attr_name]
         setattr(self, attr_name, hydrator(attr_val))
 
-    def _make_relationship(self, rel_name, hydrator):
+    def _make_relationship(self, rel_name, hydrator, default=None):
         # Some relationships are omitted if non-existent (like assignee)
         rels = self._raw_data["relationships"]
         rel_val = rels.get(rel_name, None)
         if rel_val is not None:
             rel_val = hydrator(rel_val["data"])
+        elif default is not None:
+            rel_val = default
         setattr(self, rel_name, rel_val)
 
     def __eq__(self, other):
@@ -286,12 +288,12 @@ class Report(HackerOneResource):
         self._make_relationship("reporter", self._hydrate_object)
         self._make_relationship("assignee", self._hydrate_object)
         self._make_relationship("program", self._hydrate_object)
-        self._make_relationship("bounties", self._hydrate_list_of_objects)
-        self._make_relationship("activities", self._hydrate_list_of_objects)
-        self._make_relationship("attachments", self._hydrate_list_of_objects)
-        self._make_relationship("swag", self._hydrate_list_of_objects)
-        self._make_relationship("vulnerability_types", self._hydrate_list_of_objects)
-        self._make_relationship("summaries", self._hydrate_list_of_objects)
+        self._make_relationship("bounties", self._hydrate_list_of_objects, [])
+        self._make_relationship("activities", self._hydrate_list_of_objects, [])
+        self._make_relationship("attachments", self._hydrate_list_of_objects, [])
+        self._make_relationship("swag", self._hydrate_list_of_objects, [])
+        self._make_relationship("vulnerability_types", self._hydrate_list_of_objects, [])
+        self._make_relationship("summaries", self._hydrate_list_of_objects, [])
 
 
 class User(HackerOneObject):
@@ -402,7 +404,7 @@ class ActivityBase(HackerOneObject):
         self._make_attribute("updated_at", self._hydrate_datetime)
 
         self._make_relationship("actor", self._hydrate_object)
-        self._make_relationship("attachments", self._hydrate_list_of_objects)
+        self._make_relationship("attachments", self._hydrate_list_of_objects, [])
 
         self._activity_hydrate()
 
@@ -484,6 +486,10 @@ class ActivityComment(ActivityBase):
     TYPE = "activity-comment"
 
 
+class ActivityCommentsClosed(ActivityBase):
+    TYPE = "activity-comments-closed"
+
+
 class ActivityExternalUserInvitationCancelled(ActivityBase):
     TYPE = "activity-external-user-invitation-cancelled"
 
@@ -555,8 +561,12 @@ class ActivityReportVulnerabilityTypesUpdated(ActivityBase):
     TYPE = "activity-report-vulnerability-types-updated"
 
     def _activity_hydrate(self):
-        self._make_relationship("old_vulnerability_types", self._hydrate_list_of_objects)
-        self._make_relationship("new_vulnerability_types", self._hydrate_list_of_objects)
+        self._make_relationship("old_vulnerability_types", self._hydrate_list_of_objects, [])
+        self._make_relationship("new_vulnerability_types", self._hydrate_list_of_objects, [])
+
+
+class ActivityReportSeverityUpdated(ActivityBase):
+    TYPE = "activity-report-severity-updated"
 
 
 class ActivitySwagAwarded(ActivityBase):

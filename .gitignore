@@ -1,6 +1,7 @@
 # Python
 /env/
 /build/
+/dist/
 *.py[co]
 *.egg*
 .cache
