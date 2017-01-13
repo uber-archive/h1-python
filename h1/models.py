@@ -39,6 +39,8 @@ def hydrate_objects(objs, requester=None):
 
 
 def hydrate_object(obj, requester=None):
+    if obj is None:
+        return None
     hydrator = _type_hydrators.get(obj["type"], None)
     if not callable(hydrator):
         raise Exception("Can't hydrate a %s!" % obj["type"])
